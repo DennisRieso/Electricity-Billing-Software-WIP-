@@ -26,6 +26,8 @@ public class Project extends JFrame implements ActionListener{
         JMenuItem m2 = new JMenuItem("Customer Details");
         JMenuItem m3 = new JMenuItem("Deposit Details");
         JMenuItem m4 = new JMenuItem("Calculate Bill");
+        JMenuItem m5 = new JMenuItem("New Admin");
+        JMenuItem m6 = new JMenuItem("Add Meter Info");
         master.setForeground(Color.BLUE);
         
         
@@ -64,12 +66,31 @@ public class Project extends JFrame implements ActionListener{
         m4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
         m4.setBackground(Color.WHITE);
         
+         /* ---- New Admin Button  ----- */
+        m5.setFont(new Font("monospaced", Font.PLAIN, 12));
+        ImageIcon iconAdmin = new ImageIcon(ClassLoader.getSystemResource("icon/signup.png"));
+        Image imageAdmin = iconAdmin.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+        m5.setIcon(new ImageIcon(imageAdmin));
+        m5.setMnemonic('A');
+        m5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+        m5.setBackground(Color.WHITE);
+        
+        /* ---- Add Meter Info Button  ----- */
+        m6.setFont(new Font("monospaced", Font.PLAIN, 12));
+        ImageIcon iconMeterInfo = new ImageIcon(ClassLoader.getSystemResource("icon/icon2.png"));
+        Image imageMeterInfo = iconMeterInfo.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+        m6.setIcon(new ImageIcon(imageMeterInfo));
+        m6.setMnemonic('I');
+        m6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
+        m6.setBackground(Color.WHITE);
+        
         
         m1.addActionListener(this);
         m2.addActionListener(this);
         m3.addActionListener(this);
         m4.addActionListener(this);
-        
+        m5.addActionListener(this);
+        m6.addActionListener(this);
         
         
         //-----------------------------
@@ -223,6 +244,8 @@ public class Project extends JFrame implements ActionListener{
         master.add(m2);
         master.add(m3);
         master.add(m4);
+        master.add(m5);
+        master.add(m6);
         
         info.add(info1);
         info.add(info2);
@@ -262,8 +285,14 @@ public class Project extends JFrame implements ActionListener{
         }else if(msg.equals("New Customer")){
             new NewCustomer().setVisible(true);
             
+        }else if(msg.equals("New Admin")){
+        new Signup("Admin").setVisible(true);
+        
+        }else if(msg.equals("Add Meter Info")){
+        new AddMeterInfo().setVisible(true);
+            
         }else if(msg.equals("Calculate Bill")){
-            new CalculateBill().setVisible(true);
+        new CalculateBill().setVisible(true);    
             
         }else if(msg.equals("Pay Bill")){
             new PayBill(meter).setVisible(true);

@@ -4,146 +4,297 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-public class Signup extends JFrame implements ActionListener{
+public class Signup extends JFrame implements ActionListener {
     JPanel p1;
-    JTextField t1, t2, t3, t4;
-    Choice c1;
-    JButton b1, b2;
-    Signup(){
-        setBounds(600, 250, 700, 400);
-        
+
+    JTextField usernameField, nameField, meterField, addressField, cityField, stateField, emailField, phoneField;
+    JPasswordField passwordField;
+
+    JLabel meterLabel, addressLabel, cityLabel, stateLabel, emailLabel, phoneLabel, accountTypeLabel;
+
+    JButton createButton, backButton;
+
+    String accountType;
+
+    Signup() {
+        this("Customer");
+    }
+
+    Signup(String accountType) {
+        this.accountType = accountType;
+
+        setBounds(600, 200, 760, 560);
+
         p1 = new JPanel();
-        p1.setBounds(30, 30, 650, 300);
-        p1.setLayout( null);
+        p1.setBounds(30, 30, 700, 480);
+        p1.setLayout(null);
         p1.setBackground(Color.WHITE);
         p1.setForeground(new Color(34, 139, 34));
-        p1.setBorder(new TitledBorder(new LineBorder(new Color(173, 216, 230), 2), "Create-Account", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(173, 216, 230)));
+        p1.setBorder(new TitledBorder(
+                new LineBorder(new Color(173, 216, 230), 2),
+                "Create Account",
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                new Color(173, 216, 230)
+        ));
         add(p1);
-        
-        JLabel l1 = new JLabel("Username");
-        l1.setForeground(Color.DARK_GRAY);
-        l1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l1.setBounds(100, 50, 100, 20);
-        p1.add(l1);
-        
-        t1 = new JTextField();
-        t1.setBounds(260, 50, 150, 20);
-        p1.add(t1);
-        
-        JLabel l2 = new JLabel("Name");
-        l2.setForeground(Color.DARK_GRAY);
-        l2.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l2.setBounds(100, 90, 100, 20);
-        p1.add(l2);
-        
-        t2 = new JTextField();
-        t2.setBounds(260, 90, 150, 20);
-        p1.add(t2);
-        
-        
-        JLabel l3 = new JLabel("Password");
-        l3.setForeground(Color.DARK_GRAY);
-        l3.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l3.setBounds(100, 130, 100, 20);
-        p1.add(l3);
-        
-        t3 = new JTextField();
-        t3.setBounds(260, 130, 150, 20);
-        p1.add(t3);
-        
-        
-        JLabel l4 = new JLabel("Create Account As");
-        l4.setForeground(Color.DARK_GRAY);
-        l4.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l4.setBounds(100, 170, 140, 20);
-        p1.add(l4);
-        
-        
-        JLabel l5 = new JLabel("Meter Number");
-        l5.setForeground(Color.DARK_GRAY);
-        l5.setFont(new Font("Tahoma", Font.BOLD, 14));
-        l5.setBounds(100, 210, 100, 20);
-        l5.setVisible(false);
-        p1.add(l5);
-        
-        t4 = new JTextField();
-        t4.setBounds(260, 210, 150, 20);
-        t4.setVisible(false);
-        p1.add(t4);
-        
-        c1 = new Choice();
-        c1.add("Admin");
-        c1.add("Customer");
-        c1.setBounds(260, 170, 150, 20);
-        p1.add(c1);
-        
-        c1.addItemListener(new ItemListener(){
-           public void itemStateChanged(ItemEvent ae){
-               String user = c1.getSelectedItem();
-               if(user.equals("Customer")){
-                   l5.setVisible(true);
-                   t4.setVisible(true);
-               }else{
-                   l5.setVisible(false);
-                   t4.setVisible(false);
-               }
-           } 
-        });
-        
-        
-        b1 = new JButton("Create");
-        b1.setBackground(Color.BLACK);
-        b1.setForeground(Color.WHITE);
-        b1.setBounds(140, 290, 120, 30);
-        b1.addActionListener(this);
-        p1.add(b1);
-        
-        b2 = new JButton("Back");
-        b2.setBackground(Color.BLACK);
-        b2.setForeground(Color.WHITE);
-        b2.setBounds(300, 290, 120, 30);
-        b2.addActionListener(this);
-        p1.add(b2);
-        
+
+        JLabel usernameLabel = new JLabel("Username");
+        usernameLabel.setForeground(Color.DARK_GRAY);
+        usernameLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        usernameLabel.setBounds(80, 50, 120, 20);
+        p1.add(usernameLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(230, 50, 170, 20);
+        p1.add(usernameField);
+
+        JLabel nameLabel = new JLabel("Name");
+        nameLabel.setForeground(Color.DARK_GRAY);
+        nameLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        nameLabel.setBounds(80, 90, 120, 20);
+        p1.add(nameLabel);
+
+        nameField = new JTextField();
+        nameField.setBounds(230, 90, 170, 20);
+        p1.add(nameField);
+
+        JLabel passwordLabel = new JLabel("Password");
+        passwordLabel.setForeground(Color.DARK_GRAY);
+        passwordLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        passwordLabel.setBounds(80, 130, 120, 20);
+        p1.add(passwordLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(230, 130, 170, 20);
+        p1.add(passwordField);
+
+        JLabel accountLabel = new JLabel("Account Type");
+        accountLabel.setForeground(Color.DARK_GRAY);
+        accountLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        accountLabel.setBounds(80, 170, 140, 20);
+        p1.add(accountLabel);
+
+        accountTypeLabel = new JLabel(accountType);
+        accountTypeLabel.setForeground(Color.DARK_GRAY);
+        accountTypeLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        accountTypeLabel.setBounds(230, 170, 170, 20);
+        p1.add(accountTypeLabel);
+
+        meterLabel = new JLabel("Meter Number");
+        meterLabel.setForeground(Color.DARK_GRAY);
+        meterLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        meterLabel.setBounds(80, 210, 140, 20);
+        p1.add(meterLabel);
+
+        meterField = new JTextField();
+        meterField.setBounds(230, 210, 170, 20);
+        p1.add(meterField);
+
+        addressLabel = new JLabel("Address");
+        addressLabel.setForeground(Color.DARK_GRAY);
+        addressLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        addressLabel.setBounds(80, 250, 140, 20);
+        p1.add(addressLabel);
+
+        addressField = new JTextField();
+        addressField.setBounds(230, 250, 170, 20);
+        p1.add(addressField);
+
+        cityLabel = new JLabel("City");
+        cityLabel.setForeground(Color.DARK_GRAY);
+        cityLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        cityLabel.setBounds(80, 290, 140, 20);
+        p1.add(cityLabel);
+
+        cityField = new JTextField();
+        cityField.setBounds(230, 290, 170, 20);
+        p1.add(cityField);
+
+        stateLabel = new JLabel("State");
+        stateLabel.setForeground(Color.DARK_GRAY);
+        stateLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        stateLabel.setBounds(80, 330, 140, 20);
+        p1.add(stateLabel);
+
+        stateField = new JTextField();
+        stateField.setBounds(230, 330, 170, 20);
+        p1.add(stateField);
+
+        emailLabel = new JLabel("Email");
+        emailLabel.setForeground(Color.DARK_GRAY);
+        emailLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        emailLabel.setBounds(80, 370, 140, 20);
+        p1.add(emailLabel);
+
+        emailField = new JTextField();
+        emailField.setBounds(230, 370, 170, 20);
+        p1.add(emailField);
+
+        phoneLabel = new JLabel("Phone");
+        phoneLabel.setForeground(Color.DARK_GRAY);
+        phoneLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        phoneLabel.setBounds(80, 410, 140, 20);
+        p1.add(phoneLabel);
+
+        phoneField = new JTextField();
+        phoneField.setBounds(230, 410, 170, 20);
+        p1.add(phoneField);
+
+        if (accountType.equals("Admin")) {
+            meterLabel.setVisible(false);
+            meterField.setVisible(false);
+
+            addressLabel.setVisible(false);
+            addressField.setVisible(false);
+
+            cityLabel.setVisible(false);
+            cityField.setVisible(false);
+
+            stateLabel.setVisible(false);
+            stateField.setVisible(false);
+
+            emailLabel.setVisible(false);
+            emailField.setVisible(false);
+
+            phoneLabel.setVisible(false);
+            phoneField.setVisible(false);
+        }
+
+        createButton = new JButton("Create");
+        createButton.setBackground(Color.BLACK);
+        createButton.setForeground(Color.WHITE);
+        createButton.setBounds(120, 455, 120, 30);
+        createButton.addActionListener(this);
+        p1.add(createButton);
+
+        backButton = new JButton("Back");
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.setBounds(270, 455, 120, 30);
+        backButton.addActionListener(this);
+        p1.add(backButton);
+
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/signupImage.png"));
-        Image i2 = i1.getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT);
+        Image i2 = i1.getImage().getScaledInstance(240, 240, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
-        JLabel l6 = new JLabel(i3);
-        l6.setBounds(450, 30, 250, 250);
-        p1.add(l6);
+        JLabel imageLabel = new JLabel(i3);
+        imageLabel.setBounds(430, 90, 240, 240);
+        p1.add(imageLabel);
     }
-    
-    public void actionPerformed(ActionEvent ae){
-        if(ae.getSource() == b1){
-            String username = t1.getText();
-            String name = t2.getText();
-            String password = t3.getText();
-            String user = c1.getSelectedItem();
-            String meter = t4.getText();
-            try{
-                Conn c = new Conn();
-                String str = null;
-                if(user.equals("Admin")){
-                    str = "insert into login values('"+meter+"', '"+username+"', '"+name+"', '"+password+"', '"+user+"')";
-                }else{
-                    str = "update login set username = '"+username+"', name = '"+name+"', password = '"+password+"', user = '"+user+"' where meter_no = '"+t4.getText()+"'";
-                }
-                
-                c.s.executeUpdate(str);
-                JOptionPane.showMessageDialog(null, "Account Created Successfully");
-                this.setVisible(false);
-                new Login().setVisible(true);
-            }catch(Exception e){
-                
+
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == createButton) {
+            String username = usernameField.getText().trim();
+            String name = nameField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+            String user = accountType;
+
+            if (username.isEmpty() || name.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please fill in username, name and password");
+                return;
             }
-        } else if(ae.getSource()== b2){
+
+            try {
+                Conn c = new Conn();
+
+                if (c.c == null) {
+                    JOptionPane.showMessageDialog(null, "Database connection failed");
+                    return;
+                }
+
+                String checkUsernameQuery = "select * from login where username = ?";
+                PreparedStatement checkUsernamePs = c.c.prepareStatement(checkUsernameQuery);
+                checkUsernamePs.setString(1, username);
+                ResultSet usernameRs = checkUsernamePs.executeQuery();
+
+                if (usernameRs.next()) {
+                    JOptionPane.showMessageDialog(null, "This username already exists");
+                    return;
+                }
+
+                if (user.equals("Customer")) {
+                    String meter = meterField.getText().trim();
+                    String address = addressField.getText().trim();
+                    String city = cityField.getText().trim();
+                    String state = stateField.getText().trim();
+                    String email = emailField.getText().trim();
+                    String phone = phoneField.getText().trim();
+
+                    if (meter.isEmpty() || address.isEmpty() || city.isEmpty()
+                            || state.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Please fill in all customer fields");
+                        return;
+                    }
+
+                    String checkMeterQuery = "select * from customer where meter = ?";
+                    PreparedStatement checkMeterPs = c.c.prepareStatement(checkMeterQuery);
+                    checkMeterPs.setString(1, meter);
+                    ResultSet meterRs = checkMeterPs.executeQuery();
+
+                    if (meterRs.next()) {
+                        JOptionPane.showMessageDialog(null, "This meter number already exists");
+                        return;
+                    }
+
+                    String customerQuery = "insert into customer values (?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement customerPs = c.c.prepareStatement(customerQuery);
+                    customerPs.setString(1, name);
+                    customerPs.setString(2, meter);
+                    customerPs.setString(3, address);
+                    customerPs.setString(4, city);
+                    customerPs.setString(5, state);
+                    customerPs.setString(6, email);
+                    customerPs.setString(7, phone);
+                    customerPs.executeUpdate();
+
+                    String loginQuery = "insert into login (meter_no, username, name, password, user) values (?, ?, ?, ?, ?)";
+                    PreparedStatement loginPs = c.c.prepareStatement(loginQuery);
+                    loginPs.setString(1, meter);
+                    loginPs.setString(2, username);
+                    loginPs.setString(3, name);
+                    loginPs.setString(4, password);
+                    loginPs.setString(5, "Customer");
+                    loginPs.executeUpdate();
+
+                    JOptionPane.showMessageDialog(null, "Customer Account Created Successfully");
+                    this.setVisible(false);
+                    new Login().setVisible(true);
+
+                } else if (user.equals("Admin")) {
+                    String query = "insert into login (meter_no, username, name, password, user) values (?, ?, ?, ?, ?)";
+
+                    PreparedStatement ps = c.c.prepareStatement(query);
+                    ps.setString(1, "");
+                    ps.setString(2, username);
+                    ps.setString(3, name);
+                    ps.setString(4, password);
+                    ps.setString(5, "Admin");
+                    ps.executeUpdate();
+
+                    JOptionPane.showMessageDialog(null, "Admin Account Created Successfully");
+                    this.setVisible(false);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Account could not be created");
+            }
+
+        } else if (ae.getSource() == backButton) {
             this.setVisible(false);
-            new Login().setVisible(true);
+
+            if (accountType.equals("Customer")) {
+                new Login().setVisible(true);
+            }
         }
     }
-    
-    public static void main(String[] args){
-        new Signup().setVisible(true);
+
+    public static void main(String[] args) {
+        new Signup("Customer").setVisible(true);
     }
 }
